@@ -53,9 +53,13 @@ namespace StudentWork
 
             app.UseEndpoints(endpoints =>
             {
+                // endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "default1",
+                    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
             });
         }
     }

@@ -55,11 +55,14 @@ namespace StudentWork
             {
                 // endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
-                    name: "default",
+                    name: "Home",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
-                    name: "default1",
+                    name: "Dashboard",
                     pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "Category",
+                    pattern: "{controller=Category}/{action=Index}/{id?}");
             });
         }
     }

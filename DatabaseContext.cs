@@ -10,6 +10,10 @@ namespace StudentWork
             // Phương thức khởi tạo này chứa options để kết nối đến MS SQL Server
             // Thực hiện điều này khi Inject trong dịch vụ hệ thống
         }
+        //public static StudentWorkContext Create()
+        //{
+        //    return new StudentWorkContext();
+        //}
 
         public DbSet<User> users {set; get;}
         public DbSet<Post> posts {set; get;}

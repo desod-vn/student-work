@@ -5,18 +5,17 @@
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
-@*<h1>Index</h1>*@
+
+<h1>@ViewData["Title"]</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-success">Thêm mới</a>
 </p>
+<div class="alert alert-info">
+    Danh sánh đóng góp quỹ hỗ trợ sinh viên
+</div>
 <table class="table" id="myTable">
     <thead>
-        <tr>
-            <th style="background-color: red;" colspan="4">
-                Danh sách đóng góp Quỹ hỗ trợ sinh viên
-            </th>
-        </tr>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -44,8 +43,7 @@
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Sửa</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Chi tiết</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Sửa</a>
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Xóa</a>
                 </td>
             </tr>
@@ -56,7 +54,28 @@
     <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#myTable').DataTable();
+            $('#myTable').DataTable({
+                language: {
+                    processing: "Đang tải dữ liệu",
+                    search: "Tìm kiếm: ",
+                    lengthMenu: "Hiển thị _MENU_ ",
+                    infoEmpty: "Khi không có dữ liệu",
+                    zeroRecords: "Kết quả tìm kiếm không phù hợp",
+                    emptyTable: "Không có dữ liệu",
+                    paginate: {
+                        first: "Trang đầu",
+                        previous: "Trang trước",
+                        next: "Trang sau",
+                        last: "Trang cuối"
+                    },
+                },
+                searching: true,
+                ordering:  true,
+                paging: true,
+                scrollY: 560,
+                processing: true,
+                info: false,
+            });
         });
     </script>
 }

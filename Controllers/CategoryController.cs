@@ -1,22 +1,33 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StudentWork;
 using StudentWork.Models;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Http;
+
 
 namespace StudentWork.Controllers
 {
     public class CategoryController : Controller
     {
         private readonly StudentWorkContext _context;
-
-        public CategoryController(StudentWorkContext context)
+        //private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        //public CategoryController(IWebHostEnvironment environment)
+        //{
+        //    hostingEnvironment = environment;
+        //}
+        public CategoryController(StudentWorkContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _hostingEnvironment = environment;
         }
 
         // GET: Category
@@ -54,10 +65,31 @@ namespace StudentWork.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Image,Name,Description")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,ImageFile,Name,Description")] Category category)
         {
             if (ModelState.IsValid)
             {
+                string wwwPath = this._hostingEnvironment.WebRootPath;
+                string contentPath = this._hostingEnvironment.ContentRootPath;
+
+                string path = Path.Combine(this._hostingEnvironment.WebRootPath, "Uploads");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                string fileName = Path.GetFileNameWithoutExtension(category.ImageFile.FileName);
+                string extension = Path.GetExtension(category.ImageFile.FileName);
+                string fileNameFull = fileName + extension;
+                category.Image = fileName + extension;
+                if (fileName != null)
+                {
+                    using (FileStream stream = new FileStream(Path.Combine(path, fileNameFull), FileMode.Create))
+                    {
+                        await category.ImageFile.CopyToAsync(stream);
+                    }
+                }
+
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +118,7 @@ namespace StudentWork.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Image,Name,Description")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ImageFile,Name,Description")] Category category)
         {
             if (id != category.Id)
             {
@@ -97,6 +129,29 @@ namespace StudentWork.Controllers
             {
                 try
                 {
+
+                    string wwwPath = this._hostingEnvironment.WebRootPath;
+                    string contentPath = this._hostingEnvironment.ContentRootPath;
+
+                    string path = Path.Combine(this._hostingEnvironment.WebRootPath, "Uploads");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                    string fileName = Path.GetFileNameWithoutExtension(category.ImageFile.FileName);
+                    string extension = Path.GetExtension(category.ImageFile.FileName);
+                    string fileNameFull = fileName + extension;
+                    category.Image = fileName + extension;
+                    if (fileName != null)
+                    {
+                        using (FileStream stream = new FileStream(Path.Combine(path, fileNameFull), FileMode.Create))
+                        {
+                            await category.ImageFile.CopyToAsync(stream);
+                        }
+                    }
+
+
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
@@ -140,6 +195,10 @@ namespace StudentWork.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.categories.FindAsync(id);
+            var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads", category.Image);
+            if (System.IO.File.Exists(imagePath))
+                System.IO.File.Delete(imagePath);
+
             _context.categories.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,6 +13,10 @@ namespace StudentWork.Models
         [StringLength(255)]
         [Display(Name = "Hình ảnh")]
         public string Image {set; get;}
+
+        [NotMapped]
+        [Display(Name = "Hình ảnh")]
+        public IFormFile ImageFile { get; set; }
         
         [Required]
         [StringLength(255)]

@@ -89,10 +89,8 @@
             e.stopPropagation()
             e.preventDefault()
 
-            console.log(e)
             let parent = $(e.target).parent()
             let fileInput = $(`${wrapper}`).parent().find('input[type=file]')[0]
-            @*console.log(fileInput)*@
             parent.remove()
 
             let deleteIndex = $(`${wrapper} .col-md - 4`).index(parent[0]);

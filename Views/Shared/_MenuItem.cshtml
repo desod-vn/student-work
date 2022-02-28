@@ -1,23 +1,26 @@
+@{
+    var ControllerName = ViewContext.RouteData.Values["controller"].ToString();
+}
+
 <ul class="d-menu-list">
-        <li class="active">
-            <img src="~/assets/icon/dashboard.png" />
-            <a href="#">Trang quản lý</a>
-        </li>
-        <li>
-            <img src="~/assets/icon/report.png" />
-            <a href="#">Quản lý bài viết</a>
-        </li>
-        <li>
-            <img src="~/assets/icon/document-online.png" />
-            <a href="#">Quản lý chuyên mục</a>
-        </li>
-        <li>
-            <img src="~/assets/icon/dic-employee.png" />
-            <a href="#">Hoạt động gây quỹ</a>
-        </li>
-        <li>
-            <img src="~/assets/icon/setting.png" />
-            <a href="#">Thiết lập hệ thống</a>
-        </li>
-    </ul>
-</div>
+    <li class="@(ControllerName == "Dashboard" ? "active" : "")">
+        <img src="~/assets/icon/dashboard.png" />
+        @Html.ActionLink("Trang quản lý", "Index", "Dashboard")
+    </li>
+    <li class="@(ControllerName == "Post" ? "active" : "")">
+        <img src="~/assets/icon/report.png" />
+        @Html.ActionLink("Quản lý bài viết", "Index", "Post")
+    </li>
+    <li class="@(ControllerName == "Category" ? "active" : "")">
+        <img src="~/assets/icon/document-online.png" />
+        @Html.ActionLink("Quản lý chuyên mục", "Index", "Category")
+    </li>
+    <li class="@(ControllerName == "Fund" ? "active" : "")">
+        <img src="~/assets/icon/dic-employee.png" />
+        @Html.ActionLink("Hoạt động gây quỹ", "Index", "Fund")
+    </li>
+    <li class="@(ControllerName == "Setting" ? "active" : "")">
+        <img src="~/assets/icon/setting.png" />
+        @Html.ActionLink("Thiết lập trang chủ", "Index", "Setting")
+    </li>
+</ul>

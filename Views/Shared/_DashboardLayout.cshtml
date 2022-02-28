@@ -23,20 +23,21 @@
             </div>
 
             <partial name="_MenuItem" />
-            <div class="d-content">
-                <header class="d-header">
-                    <div class="d-header-name">
-                        @ViewData["Title"]
-                    </div>
-                    @* <div class="d-header-user">
-                            <img src="assets/icon/avatar-default.png" class="logo-user"/>
-                            Vương Toàn Thắng
-                            <img src="assets/icon/option.png" />
-                        </div> *@
-                </header>
+        </div>
+        <div class="d-content">
+            <header class="d-header">
+                <div class="d-header-name">
+                    @ViewData["Title"]
+                </div>
+                @* <div class="d-header-user">
+                    <img src="assets/icon/avatar-default.png" class="logo-user"/>
+                    Vương Toàn Thắng
+                    <img src="assets/icon/option.png" />
+                </div> *@
+            </header>
 
-                <main class="d-content-data">
-                    @RenderBody()
+            <main class="d-content-data">
+                @RenderBody()
             </div>
         </div>
     </div>

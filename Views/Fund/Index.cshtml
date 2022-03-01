@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Hoạt động gây quỹ";
-    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    Layout = "Layout/_DashboardLayout";
 }
 <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
 
@@ -70,7 +70,7 @@
                     },
                 },
                 searching: true,
-                ordering:  true,
+                ordering:  false,
                 paging: true,
                 scrollY: 560,
                 processing: true,

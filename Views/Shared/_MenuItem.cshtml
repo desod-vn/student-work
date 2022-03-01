@@ -4,23 +4,27 @@
 
 <ul class="d-menu-list">
     <li class="@(ControllerName == "Dashboard" ? "active" : "")">
-        <img src="~/assets/icon/dashboard.png" />
+        <i class="mx-3 fas fa-chart-area"></i>
         @Html.ActionLink("Trang quản lý", "Index", "Dashboard")
     </li>
+    <li class="@(ControllerName == "User" ? "active" : "")">
+        <i class="mx-3 fas fa-user"></i>
+        @Html.ActionLink("Quản lý tài khoản", "Index", "User")
+    </li>
     <li class="@(ControllerName == "Post" ? "active" : "")">
-        <img src="~/assets/icon/report.png" />
+        <i class="mx-3 fas fa-newspaper"></i>
         @Html.ActionLink("Quản lý bài viết", "Index", "Post")
     </li>
     <li class="@(ControllerName == "Category" ? "active" : "")">
-        <img src="~/assets/icon/document-online.png" />
+        <i class="mx-3 fas fa-bars"></i>
         @Html.ActionLink("Quản lý chuyên mục", "Index", "Category")
     </li>
     <li class="@(ControllerName == "Fund" ? "active" : "")">
-        <img src="~/assets/icon/dic-employee.png" />
+        <i class="mx-3 fas fa-funnel-dollar"></i>
         @Html.ActionLink("Hoạt động gây quỹ", "Index", "Fund")
     </li>
     <li class="@(ControllerName == "Setting" ? "active" : "")">
-        <img src="~/assets/icon/setting.png" />
+        <i class="mx-3 fas fa-cogs"></i>
         @Html.ActionLink("Thiết lập trang chủ", "Index", "Setting")
     </li>
 </ul>

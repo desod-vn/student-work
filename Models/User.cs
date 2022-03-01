@@ -14,10 +14,14 @@ namespace StudentWork.Models
         
         [Required]
         [StringLength(255)]
+        [Display(Name = "Họ tên")]
+
         public string Name {set; get;}
 
         [Required]
         [StringLength(255)]
+        [Display(Name = "Mật khẩu")]
+
         public string Password {set; get;}
     }
 }

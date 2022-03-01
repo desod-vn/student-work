@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentWork.Models;
-using System;
 using System.Threading.Tasks;
 
 namespace StudentWork.Controllers

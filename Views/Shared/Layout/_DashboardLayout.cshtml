@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor;
+@if(HttpContextAccessor.HttpContext.Session.GetString("Name") == null) 
+{
+    <script>
+        window.location.replace("/");
+    </script>
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,18 +15,17 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/deo.css" />
-    <link rel="stylesheet" href="~/assets/fontawesome-5.15.1/css/all.min.css" />
-    <script src="~/assets/fontawesome-5.15.1/js/all.js"></script>
+    <script src="https://kit.fontawesome.com/2d837f5405.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="d-container">
         <div class="d-menu">
             <div class="d-menu-wrap">
-                <span>
-                    <img src="~/assets/img/toggle.png" class="d-menu-icon" />
-                </span>
-                <a href="">
-                    <img src="~/assets/img/logo.png" class="d-menu-logo" />
+                <a href="~/Dashboard">
+                    <span>
+                        <img src="~/assets/img/toggle.png" class="d-menu-icon" />
+                    </span>
+                        <img src="~/assets/img/logo.png" class="d-menu-logo" />
                 </a>
             </div>
 
@@ -29,11 +36,15 @@
                 <div class="d-header-name">
                     @ViewData["Title"]
                 </div>
-                @* <div class="d-header-user">
+                <div class="d-header-user">
                     <img src="assets/icon/avatar-default.png" class="logo-user"/>
-                    Vương Toàn Thắng
-                    <img src="assets/icon/option.png" />
-                </div> *@
+                    <b>
+                        @HttpContextAccessor.HttpContext.Session.GetString("Name")
+                    </b>
+                    <a asp-controller="Home" asp-action="Logout" title="Đăng xuất">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
             </header>
 
             <main class="d-content-data">

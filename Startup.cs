@@ -28,6 +28,12 @@ namespace StudentWork
                 string connectstring = Configuration.GetConnectionString("StudentWorkContext");
                 options.UseSqlServer(connectstring);
             });
+            services.AddDistributedMemoryCache();
+            services.AddSession(cfg => {
+                cfg.Cookie.Name = "desod";
+                cfg.IdleTimeout = new TimeSpan(3, 0, 0);
+            });
+            services.AddHttpContextAccessor();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,7 +49,7 @@ namespace StudentWork
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthorization();

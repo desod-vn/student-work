@@ -3,6 +3,10 @@
 }
 
 <ul class="d-menu-list">
+    <li>
+        <i class="mx-3 fas fa-home"></i>
+        @Html.ActionLink("Trang chủ", "Index", "Home")
+    </li>
     <li class="@(ControllerName == "Dashboard" ? "active" : "")">
         <i class="mx-3 fas fa-chart-area"></i>
         @Html.ActionLink("Trang quản lý", "Index", "Dashboard")

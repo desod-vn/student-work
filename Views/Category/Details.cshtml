@@ -2,38 +2,81 @@
 
 @{
     ViewData["Title"] = "Chỉnh sửa chuyên mục";
-    Layout = "Layout/_DashboardLayout";
+    Layout = "~/Views/Shared/Layout/_DashboardLayout.cshtml";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>@*@ViewData["Title"]</h1>*@
 
 <div>
     <h4>
-        @Html.DisplayNameFor(model => model.Name)
+        @Html.DisplayNameFor(model => model.Name) - @Html.DisplayFor(model => model.Name)
     </h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-4">
             @Html.DisplayNameFor(model => model.Image)
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-8">
             <img src="~/Uploads/@Model.Image" style="width: 200px" /><br />
             @Html.DisplayFor(model => model.Image)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-4">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-8">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class = "col-sm-4">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-8">
             @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
 </div>
+<h5>Danh sách bài viết thuộc thể loại @Model.Name</h5>
+<table class="table">
+    <tr>
+        <th>
+            Tên
+        </th>
+        <th>
+            Hình ảnh
+        </th>
+        <th>
+            Ngày đăng
+        </th>
+        <th>
+            Thể loại
+        </th>
+
+    </tr>
+
+    @foreach (var item in ViewBag.ListPostOfCategory)
+    {
+        <tr>
+
+            <td>
+                @*<a href="/Home/Details/@item.ProductId" class="product_name">
+                    @Html.Action("getNamePro", "HomeUser", new { pid = item.ProductId })
+                </a>*@
+                @item.Name
+            </td>
+            <td>
+                @*<img width="75" height="75" alt="" src="@Html.Action("getImagePro", "HomeUser", new { pid = item.ProductId })">*@
+                <img src="~/Uploads/@item.Image" style="width: 200px" />
+            </td>
+            <td>
+                @item.PublishDate
+            </td>
+            <td>
+                @item.Category.Name
+            </td>
+
+        </tr>
+    }
+
+</table>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Chỉnh sửa</a> |
     <a asp-action="Index">Quay lại danh sách chuyên mục</a>

@@ -25,10 +25,17 @@ namespace StudentWork.Controllers
             _context = context;
             _hostingEnvironment = environment;
         }
+
+        //[ChildActionOnly] // phuong thuc khong duoc goi thong qua URL
+        //public string getUserName(int iduser)
+        //{
+        //    User user = _context.users.Find(iduser);
+        //    return user.Name;
+        //}
         public async Task<IActionResult> Index()
         {
-            //var products = _context.categories.Include(p => p.Name).Include(p => p.Name);
-            return View(await _context.posts.ToListAsync());
+            var posts = _context.posts.Include(p => p.Category);
+            return View(await posts.ToListAsync());
         }
         public async Task<IActionResult> Details(int? id)
         {
@@ -36,8 +43,10 @@ namespace StudentWork.Controllers
             {
                 return NotFound();
             }
-            var post = await _context.posts
+            var post = await _context.posts.Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            User user = _context.users.Find(post.UserId);
+            ViewBag.UserNameAuthorPost = user.Name;
             if (post == null)
             {
                 return NotFound();
@@ -109,6 +118,8 @@ namespace StudentWork.Controllers
             {
                 return NotFound();
             }
+            ViewBag.CategoryId = new SelectList(_context.categories, "Id", "Name", post.CategoryId);
+            ViewBag.UserId = new SelectList(_context.users, "Id", "Name", post.UserId);
             return View(post);
         }
         [HttpPost]
@@ -174,14 +185,16 @@ namespace StudentWork.Controllers
                 return NotFound();
             }
 
-            var category = await _context.categories
+            var post = await _context.posts.Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
+            User user = _context.users.Find(post.UserId);
+            ViewBag.UserNameAuthorPost = user.Name;
+            if (post == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(post);
         }
 
         // POST: Category/Delete/5
@@ -189,12 +202,12 @@ namespace StudentWork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.categories.FindAsync(id);
-            var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads", category.Image);
+            var post = await _context.posts.FindAsync(id);
+            var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "Uploads", post.Image);
             if (System.IO.File.Exists(imagePath))
                 System.IO.File.Delete(imagePath);
 
-            _context.categories.Remove(category);
+            _context.posts.Remove(post);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -55,6 +55,7 @@ namespace StudentWork.Controllers
 
             if (data.Count() > 0)
             {
+                HttpContext.Session.SetInt32("UserIdLogin", data.FirstOrDefault().Id);
                 HttpContext.Session.SetString("Name", data.FirstOrDefault().Name);
                 HttpContext.Session.SetString("Email", data.FirstOrDefault().Email);
 

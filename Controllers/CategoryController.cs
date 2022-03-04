@@ -39,6 +39,11 @@ namespace StudentWork.Controllers
 
             var category = await _context.categories
                 .FirstOrDefaultAsync(m => m.Id == id);
+            var list = await _context.posts.Where(x => x.CategoryId == id).ToListAsync();
+            ViewBag.ListPostOfCategory = list;
+
+            //var post = await _context.posts.Include(p => p.Category)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
                 return NotFound();

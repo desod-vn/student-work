@@ -17,6 +17,7 @@ namespace StudentWork.Models
         public string Image {set; get;}
 
         [NotMapped]
+        [Required]
         [Display(Name = "Hình ảnh")]
         public IFormFile ImageFile { get; set; }
         
@@ -36,7 +37,8 @@ namespace StudentWork.Models
 
         [Display(Name = "Thể loại")]
         public int CategoryId { get; set; }
-        
+
+        [Display(Name = "Thể loại")]
         public Category Category {set; get;}
 
         public int UserId { get; set; }

@@ -16,6 +16,7 @@ namespace StudentWork.Models
         public string Image {set; get;}
 
         [NotMapped]
+        [Required]
         [Display(Name = "Hình ảnh")]
         public IFormFile ImageFile { get; set; }
         

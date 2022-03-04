@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +16,7 @@ namespace StudentWork.Models
         public string Image {set; get;}
 
         [NotMapped]
+        [Required]
         [Display(Name = "Hình ảnh")]
         public IFormFile ImageFile { get; set; }
         
@@ -27,5 +29,7 @@ namespace StudentWork.Models
         [StringLength(255)]
         [Display(Name = "Mô tả")]
         public string Description {set; get;}
+
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

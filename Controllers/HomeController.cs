@@ -8,6 +8,7 @@ using System.Text;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography;
 using System.Linq;
+using System;
 
 namespace StudentWork.Controllers
 {
@@ -22,15 +23,55 @@ namespace StudentWork.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageNumber)
         {
             ViewBag.Funds = await _context.funds.ToListAsync();
 
-            return View();
+            ViewBag.HotPosts = await _context.settings
+                .Where(s => s.Key.Contains("ST_HotPosts"))
+                .ToDictionaryAsync(s => s.Key, s => s.Value);
+
+            ViewBag.HotImage = _context.settings
+                .Where(s => s.Key == "ST_ImageLink_Image")
+                .FirstOrDefault();
+            
+            ViewBag.HotImageLink = _context.settings
+                .Where(s => s.Key == "ST_ImageLink_Link")
+                .FirstOrDefault();
+            
+            var posts = _context.posts
+                .Include(p => p.Category)
+                .Include(p => p.User);
+            
+
+            int pageSize = 1;
+            return View(await PaginatedList<Post>.CreateAsync(posts.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Dashboard()
         {
+            ViewBag.TotalUsers = await _context.users.CountAsync();
+
+            ViewBag.TotalPosts = await _context.posts.CountAsync();
+
+            ViewBag.TotalCategories = await _context.categories.CountAsync();
+
+            ViewBag.TotalFunds = await _context.funds.CountAsync();
+
+            ViewBag.TotalMoney = await _context.funds.SumAsync(f => f.Price);
+
+            ViewBag.TopFunds = _context.funds.OrderByDescending(f => f.Price).Take(5);
+
+            ViewBag.TopCategories = _context.categories
+                .Include(c => c.Posts)
+                .OrderByDescending(c => c.Posts.Count)
+                .Take(5);
+
+            ViewBag.TopUsers = _context.users
+                .Include(u => u.Posts)
+                .OrderByDescending(c => c.Posts.Count)
+                .Take(5);
+
             return View();
         }
 
@@ -59,7 +100,7 @@ namespace StudentWork.Controllers
                 HttpContext.Session.SetString("Name", data.FirstOrDefault().Name);
                 HttpContext.Session.SetString("Email", data.FirstOrDefault().Email);
 
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("Dashboard");
             }
             else
             {
@@ -68,15 +109,11 @@ namespace StudentWork.Controllers
             }
         }
 
-
-
         public ActionResult Logout()
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
- 
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

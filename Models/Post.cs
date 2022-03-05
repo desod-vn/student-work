@@ -24,11 +24,13 @@ namespace StudentWork.Models
         [Required]
         [StringLength(255)]
         [Display(Name = "Tên")]
+        [MinLength(10)]
         public string Name {set; get;}
 
         [Required]
         [Column(TypeName="Ntext")]
         [Display(Name = "Nội dung")]
+        [MinLength(300)]
         public string Content {set; get;}
 
         [DataType(DataType.Date)]

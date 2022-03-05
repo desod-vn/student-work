@@ -1,0 +1,175 @@
+@{
+    ViewData["Title"] = "Thiết lập trang chủ";
+    Layout = "Layout/_DashboardLayout";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div id="setting">
+    <div class="card">
+        <div class="card-header" id="settingHeadingOne">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#settingOne" aria-expanded="true" aria-controls="settingOne">
+                    Thiết lập thông tin nổi bật
+                </button>
+            </h5>
+        </div>
+        <div id="settingOne" class="collapse show" aria-labelledby="settingHeadingOne" data-parent="#setting">
+            <div class="card-body">
+                <form asp-action="HotPosts" method="post" class="form-row p-3">
+                    @for(int i = 0; i < 3; i++ )
+                    {
+                        <div class="form-group col-4">
+                            <div class="border p-3">
+                                <label for="title-@(i + 1)">Tiêu đề @(i + 1): </label>
+                                <input 
+                                    type="text"
+                                    name="titles"
+                                    class="form-control"
+                                    id="title-@(i + 1)" 
+                                    value='@(ViewBag.HotPosts.ContainsKey("ST_HotPosts_Title_" + i.ToString()) ? ViewBag.HotPosts["ST_HotPosts_Title_" + i.ToString()] : "")'
+                                    required 
+                                />
+                                
+                                <label for="description-@(i + 1)">Mô tả @(i + 1): </label>
+                                <textarea
+                                    style="resize: none;"
+                                    class="form-control"
+                                    name="descriptions"
+                                    id="description-@(i + 1)"
+                                    rows="2"
+                                    required
+                                >@(ViewBag.HotPosts.ContainsKey("ST_HotPosts_Description_" + i.ToString()) ? ViewBag.HotPosts["ST_HotPosts_Description_" + i.ToString()] : "")</textarea>
+
+                                <label for="link-@(i + 1)">Liên kết @(i + 1): </label>
+                                <input
+                                    type="text"
+                                    name="links"
+                                    class="form-control"
+                                    id="link-@(i + 1)"
+                                    placeholder="http://"
+                                    value='@(ViewBag.HotPosts.ContainsKey("ST_HotPosts_Link_" + i.ToString()) ? ViewBag.HotPosts["ST_HotPosts_Link_" + i.ToString()] : "")'
+                                    required
+                                />
+                            </div>
+                        </div>
+                    }
+                    <div class="col-12 p-2">
+                        <input type="submit" class="btn btn-success" value="Lưu cài đặt" />
+                        <input type="reset" class="btn btn-danger" value="Khôi phục" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="settingHeadingTwo">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#settingTwo" aria-expanded="true" aria-controls="settingTwo">
+                    Hiển thị hình ảnh nổi bật
+                </button>
+            </h5>
+        </div>
+
+        <div id="settingTwo" class="collapse collapsed" aria-labelledby="settingHeadingTwo" data-parent="#setting">
+            <div class="card-body">
+                <form class="form-row p-3" asp-action="HotImage" method="post" enctype="multipart/form-data">
+                    <label for="image">Liên kết hình ảnh: </label>
+                    <input
+                        type="text"
+                        name="image"
+                        class="form-control"
+                        id="image"
+                        placeholder="http://"
+                        value='@(ViewBag.HotImage != null ? ViewBag.HotImage.Value : "")'
+                        required
+                    />
+
+                    <label for="link">Chuyển hướng đến: </label>
+                    <input
+                        type="text"
+                        name="link"
+                        class="form-control"
+                        id="link"
+                        placeholder="http://"
+                        value='@(ViewBag.HotImageLink != null ? ViewBag.HotImageLink.Value : "")'
+                        required
+                    />
+
+                    <div class="col-12 p-2">
+                        <input type="submit" class="btn btn-success" value="Lưu cài đặt" /> 
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="settingHeadingThree">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#settingThree" aria-expanded="true" aria-controls="settingThree">
+                    Hiển thị thư mục nổi bật
+                </button>
+            </h5>
+        </div>
+
+        <div id="settingThree" class="collapse collapsed" aria-labelledby="settingHeadingThree" data-parent="#setting">
+            <div class="card-body">
+                <form asp-action="HotCategories" method="post" class="form-row p-3">
+                    @foreach (var item in ViewBag.Categories)
+                    {
+                        <div class="form-group form-check mx-2">
+                            <input
+                                type="checkbox"
+                                name="ids"
+                                value="@item.Id"
+                                class="form-check-input"
+                                id="@item.Id"
+                                checked="@ViewBag.HotCategories.Contains(item.Id.ToString())"
+                            >
+                            <label class="form-check-label" for="@item.Id">@item.Name</label>
+                        </div>
+                    }
+                    <div class="col-12 p-2">
+                        <input type="submit" class="btn btn-success" value="Lưu cài đặt" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="settingHeadingFour">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#settingFour" aria-expanded="true" aria-controls="settingFour">
+                    Hiển thị thư mục quan hệ doanh nghiệp
+                </button>
+            </h5>
+        </div>
+
+        <div id="settingFour" class="collapse collapsed" aria-labelledby="settingHeadingFour" data-parent="#setting">
+            <div class="card-body">
+                <form asp-action="HotWorks" method="post" class="form-row p-3">
+                    @foreach (var item in ViewBag.Categories)
+                    {
+                        <div class="form-group form-check mx-2">
+                            <input
+                                type="checkbox"
+                                name="ids"
+                                value="@item.Id"
+                                class="form-check-input"
+                                id="@item.Id"
+                                checked="@ViewBag.HotWorks.Contains(item.Id.ToString())"
+                            >
+                            <label class="form-check-label" for="@item.Id">@item.Name</label>
+                        </div>
+                    }
+                    <div class="col-12 p-2">
+                        <input type="submit" class="btn btn-success" value="Lưu cài đặt" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -22,10 +22,10 @@ namespace StudentWork.Models
         
         [Required]
         [StringLength(255)]
+        [MinLength(10)]
         [Display(Name = "Tên chuyên mục")]
         public string Name {set; get;}
 
-        [Required]
         [StringLength(255)]
         [Display(Name = "Mô tả")]
         public string Description {set; get;}

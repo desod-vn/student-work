@@ -3,7 +3,7 @@
 @if(HttpContextAccessor.HttpContext.Session.GetString("Name") == null) 
 {
     <script>
-        window.location.replace("/");
+        @* window.location.replace("/"); *@
     </script>
 }
 <!DOCTYPE html>
@@ -20,12 +20,9 @@
 <body>
     <div class="d-container">
         <div class="d-menu">
-            <div class="d-menu-wrap">
+            <div class="d-menu-wrap d-flex justify-content-center">
                 <a href="~/Dashboard">
-                    <span>
-                        <img src="~/assets/img/toggle.png" class="d-menu-icon" />
-                    </span>
-                        <img src="~/assets/img/logo.png" class="d-menu-logo" />
+                    <img src="~/assets/img/logo.png" class="d-menu-logo" />
                 </a>
             </div>
 

@@ -1,6 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Phòng công tác sinh viên";
 }
+@model PaginatedList<StudentWork.Models.Post>
+
 <div class="row">
     <div class="col-lg-4 col-12">
         <div class="card">
@@ -11,9 +13,18 @@
             {
                 <div class="card m-3">
                     <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <h5 class="card-title font-weight-bold">
+                            @(ViewBag.HotPosts.ContainsKey("ST_HotPosts_Title_" + i.ToString()) ? ViewBag.HotPosts["ST_HotPosts_Title_" + i.ToString()] : "")
+                        </h5>
+                        <p class="card-text text-muted small pl-3">
+                            @(ViewBag.HotPosts.ContainsKey("ST_HotPosts_Description_" + i.ToString()) ? ViewBag.HotPosts["ST_HotPosts_Description_" + i.ToString()].Substring(0, 150) + "..." : "")
+                        </p>
+                        <a 
+                            href='@(ViewBag.HotPosts.ContainsKey("ST_HotPosts_Link_" + i.ToString()) ? ViewBag.HotPosts["ST_HotPosts_Link_" + i.ToString()] : "")'
+                            class="btn btn-primary"
+                        >
+                            <i class="fas fa-angle-double-right"></i> Xem chi tiết
+                        </a>
                     </div>
                 </div>
             }
@@ -21,12 +32,14 @@
     </div>
 
     <div class="col-lg-8 col-12">
-        <img class="img-fluid" src="~/assets/img/a1.jpg" />
+        <a href='@(ViewBag.HotImageLink != null ? ViewBag.HotImageLink.Value : "")'>
+            <img class="img-fluid" src='@(ViewBag.HotImage != null ? ViewBag.HotImage.Value : "~/assets/img/a1.jpg")' />
+        </a>
     </div>
 </div>
 
 <div class="container">
-    <div class="border mt-5">
+    <div class="border mt-5" id="post">
         <div class="bg-primary h2 p-3 font-weight-bold text-light">Bài viết cập nhật</div>
         <div class="px-2">
             <div class="alert alert-info my-2">
@@ -35,39 +48,67 @@
                 <span class="badge badge-pill badge-success p-2">Học bổng</span>
                 <span class="badge badge-pill badge-danger p-2">Hoạt động sinh viên</span>
             </div>
-            @for(int i = 0; i < 10; i++)
+            @foreach(var item in Model.Select((value, i) => new { i, value }))
             {
                 <div class="row my-2">
                     <div class="col-lg-4 col-12">
-                        <img class="img-fluid" src="~/assets/img/a1.jpg" />
+                        <a href='@Url.Action("Details", "Post", new { id = item.value.Id })'>
+                            <img class="img-fluid" style="height: 200px;" src='@(item.value.Image != null ? "/Uploads/" +item.value.Image : "~/assets/img/a1.jpg")' />
+                        </a>
                     </div>
                     <div class="col-lg-8 col-12">
-                        <h2>Đây là title của bài viết này đó bạn ơi</h2>
+                        <a class="h2" href='@Url.Action("Details", "Post", new { id = item.value.Id })'>
+                            @item.value.Name
+                        </a>
                         <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas molestiae accusantium delectus eaque, similique cumque excepturi corporis ut ratione quasi reiciendis quia quam! Voluptatibus delectus cum atque? Quis, architecto suscipit?
+                            <div class="small">
+                                <span class="mx-3">
+                                    <i class="fas fa-user"></i>
+                                    @item.value.User.Name
+                                </span>
+                                <span class="mx-3">
+                                    <i class="fas fa-clock"></i>
+                                    @item.value.PublishDate
+                                </span>
+                                <span class="mx-3">
+                                    <i class="fas fa-folder"></i> 
+                                    @item.value.Category.Name
+                                </span>
+                            </div>
                         </p>
                     </div>
                 </div>
-                @if(i != 9)
+                @if(item.i != Model.PageIndex - 1)
                 {
                     <div class="border border-bottom"></div>
                 }
             }
+
+            @{
+                var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+            }
+
         </div>
         <ul class="pagination bg-light p-2 justify-content-end mb-0">
             <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
+                <a
+                    asp-action="Index"
+                    asp-fragment="post"
+                    asp-route-pageNumber="@(Model.PageIndex - 1)"
+                    class="page-link btn @prevDisabled">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
                 </a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
             <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
+                <a
+                    asp-action="Index"
+                    asp-fragment="post"
+                    asp-route-pageNumber="@(Model.PageIndex + 1)"
+                    class="page-link btn @nextDisabled">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
                 </a>
             </li>
         </ul>

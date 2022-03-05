@@ -12,7 +12,6 @@ namespace StudentWork.Models
         [StringLength(255)]
         public string Key {set; get;}
         
-        [Required]
         [StringLength(255)]
         public string Value {set; get;}
     }

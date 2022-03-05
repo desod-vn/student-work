@@ -1,0 +1,105 @@
+@{
+    ViewData["Title"] = "Trang quản lý";
+    Layout = "Layout/_DashboardLayout";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-3">
+        <div class="text-light mx-5 my-3 bg-danger p-3 d-flex justify-content-between align-items-center">
+            <div>
+                <h4>@ViewBag.TotalUsers</h4>
+                Tài khoản
+            </div>
+            <i class="h1 fas fa-users"></i>
+        </div>
+    </div>
+
+    <div class="col-3">
+        <div class="text-light mx-5 my-3 bg-success p-3 d-flex justify-content-between align-items-center">
+            <div>
+                <h4>@ViewBag.TotalPosts</h4>
+                Bài viết
+            </div>
+            <i class="h1 fas fa-newspaper"></i>
+        </div>
+    </div>
+
+    <div class="col-3">
+        <div class="text-light mx-5 my-3 bg-primary p-3 d-flex justify-content-between align-items-center">
+            <div>
+                <h4>@ViewBag.TotalCategories</h4>
+                Chuyên mục
+            </div>
+            <i class="h1 fas fa-folder"></i>
+        </div>
+    </div>
+
+    <div class="col-3">
+        <div class="text-light mx-5 my-3 bg-info p-3 d-flex justify-content-between align-items-center">
+            <div>
+                <h4>@ViewBag.TotalFunds</h4>
+                Nhà hảo tâm
+            </div>
+            <i class="h1 fas fa-hand-holding-usd"></i>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="border p-3">
+            <div class="alert alert-info">
+                Hoạt động gây quỹ
+            </div>
+            <p>
+                Tổng số tiền: <strong>@String.Format("{0:#,0}", ViewBag.TotalMoney)</strong>
+            </p>
+            <p>
+                Số lượng nhà hảo tâm: <strong>@ViewBag.TotalFunds</strong>
+            </p>
+            <p>
+                Top 5 nhà hảo tâm ủng hộ nhiều nhất:
+                <ul class="list-group">
+                    @foreach (var item in ViewBag.TopFunds)
+                    {
+                        <li class="list-group-item">
+                            Nhà hảo tâm <b>@item.Name</b> đến từ <b>@item.From</b> đã ủng hộ <b>@String.Format("{0:#,0}", item.Price)</b>
+                        </li>
+                    }
+                </ul>
+            </p>
+        </div>
+    </div>
+
+
+    <div class="col-6">
+        <div class="border p-3">
+            <div class="alert alert-danger">
+                Top tài khoản đăng bài viết
+            </div>
+            <ul class="list-group">
+                @foreach (var item in ViewBag.TopUsers)
+                {
+                    <li class="list-group-item">
+                        @item.Name - <strong>@item.Posts.Count</strong> bài viết
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div class="border p-3 mt-3">
+            <div class="alert alert-primary">
+                Top chuyên mục được quan tâm
+            </div>
+            <ul class="list-group">
+                @foreach (var item in ViewBag.TopCategories)
+                {
+                    <li class="list-group-item">
+                        @item.Name <span class="badge badge-success">@item.Posts.Count</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

@@ -20,11 +20,14 @@
 ####################
 UpgradeLog.XML
 _UpgradeReport_Files/
+
 ###############
 # Directories #
 ###############
 bin/
 obj/
+.config/
+.vs/
 wwwroot/Uploads/
 TestResults/
 ###################

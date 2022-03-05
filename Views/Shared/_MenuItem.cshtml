@@ -7,9 +7,9 @@
         <i class="mx-3 fas fa-home"></i>
         @Html.ActionLink("Trang chủ", "Index", "Home")
     </li>
-    <li class="@(ControllerName == "Dashboard" ? "active" : "")">
+    <li class="@(ControllerName == "Home" ? "active" : "")">
         <i class="mx-3 fas fa-chart-area"></i>
-        @Html.ActionLink("Trang quản lý", "Index", "Dashboard")
+        @Html.ActionLink("Trang quản lý", "Dashboard", "Home")
     </li>
     <li class="@(ControllerName == "User" ? "active" : "")">
         <i class="mx-3 fas fa-user"></i>

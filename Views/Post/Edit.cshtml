@@ -1,52 +1,46 @@
-﻿@model StudentWork.Models.Post
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor;
+@model StudentWork.Models.Post
 
 @{
     ViewData["Title"] = "Chỉnh sửa";
     Layout = "~/Views/Shared/Layout/_DashboardLayout.cshtml";
 }
-
+<script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
 <h1>@Model.Name</h1>
 
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
+            <div id="input1" class="form-group">
                 <label asp-for="ImageFile" class="control-label"></label>
                 <input @*class="form-control text-box single-line"*@ id="ImageFile" name="ImageFile" accept="image/*" type="file" value=""
                        onchange="onFileChosen(event, '#imageWrapper')" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
-                <div id="imageWrapper" class="row col-md-12">
+                <div id="imageWrapper" class="col-md-9">
 
                 </div>
             </div>
-            <div class="form-group">
+            <div id="input2" class="form-group col-md-6">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div id="input3" class="form-group col-md-6">
                 <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
+                <textarea asp-for="Content" class="form-control" id="editor"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PublishDate" class="control-label"></label>
-                <input asp-for="PublishDate" class="form-control" />
-                <span asp-validation-for="PublishDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            <input asp-for="PublishDate" class="form-control" type="hidden" />
+            <div id="input4" class="form-group col-md-6">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.CategoryId"></select>
+                <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.CategoryId" style="margin-left: unset;"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label">Tác giả</label>
-                <select asp-for="UserId" class="form-control" asp-items="@ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
+            <select asp-for="UserId" class="form-control" asp-items="@ViewBag.UserId" id="userHidden"></select>
             <div class="form-group">
                 <input type="submit" value="Lưu" class="btn btn-primary" />
             </div>
@@ -57,7 +51,18 @@
 <div>
     <a asp-action="Index">Quay lại danh sách bài viết</a>
 </div>
-
+<script>
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $('#userHidden').hide();
+        });
+    </script>
 }

@@ -6,59 +6,54 @@
     ViewData["Title"] = "Thêm mới";
     Layout = "~/Views/Shared/Layout/_DashboardLayout.cshtml";
 }
+
 <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
 <h1>Thêm mới</h1>
 
 
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div id="input1" class="form-group">
                 <label asp-for="ImageFile" class="control-label"></label>
-                <input @*class="form-control text-box single-line"*@ id="ImageFile" name="ImageFile" accept="image/*" type="file" value=""
+                <input id="ImageFile" name="ImageFile" accept="image/*" type="file" value=""
                        onchange="onFileChosen(event, '#imageWrapper')" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
-                <div id="imageWrapper" class="row col-md-12">
+                <div id="imageWrapper" class="row col-md-9">
 
                 </div>
             </div>
-            <div class="form-group">
+            <div id="input2" class="form-group col-md-6">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div id="input3" class="form-group col-md-6">
                 <label asp-for="Content" class="control-label"></label>
                 <textarea asp-for="Content" class="form-control" id="editor"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="PublishDate" class="control-label"></label>
-                <input asp-for="PublishDate" class="form-control" />
-                <span asp-validation-for="PublishDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            
+            <input asp-for="PublishDate" class="form-control" value="@DateTime.Now" type="hidden"/>
+                
+            <div id="input4" class="form-group col-md-6">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.CategoryId"></select>
-                @*@Html.DropDownList("CategoryId", (IEnumerable<SelectListItem>)ViewBag.list1, null, new { @class = "form-control" })*@
-                @*@Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control" })*@
+                <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.CategoryId" style="margin-left: unset"></select>
             </div>
             <div class="form-group">
-                @*<label asp-for="UserId" class="control-label"></label>*@
                 <input asp-for="UserId" type="hidden" class="form-control" value="@HttpContextAccessor.HttpContext.Session.GetInt32("UserIdLogin")" />
-                @*<span asp-validation-for="UserId" class="text-danger"></span>*@
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Tạo mới" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Quay lại danh sách bài viết</a>
 </div>
 <script>
     ClassicEditor

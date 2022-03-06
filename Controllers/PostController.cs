@@ -17,7 +17,6 @@ namespace StudentWork.Controllers
     public class PostController : Controller
     {
         private readonly StudentWorkContext _context;
-        //private readonly IHostingEnvironment hostingEnvironment;
         private readonly IWebHostEnvironment _hostingEnvironment;
         
         public PostController(StudentWorkContext context, IWebHostEnvironment environment)
@@ -26,12 +25,6 @@ namespace StudentWork.Controllers
             _hostingEnvironment = environment;
         }
 
-        //[ChildActionOnly] // phuong thuc khong duoc goi thong qua URL
-        //public string getUserName(int iduser)
-        //{
-        //    User user = _context.users.Find(iduser);
-        //    return user.Name;
-        //}
         public async Task<IActionResult> Index()
         {
             var posts = _context.posts.Include(p => p.Category);
@@ -62,7 +55,6 @@ namespace StudentWork.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,ImageFile,Name,Content,PublishDate,CategoryId,UserId")] Post postModel)
         public async Task<IActionResult> Create([Bind("Id,ImageFile,Name,Content,PublishDate,CategoryId,UserId")] Post postModel)
         {
             if (ModelState.IsValid)
@@ -88,11 +80,6 @@ namespace StudentWork.Controllers
                         await postModel.ImageFile.CopyToAsync(stream);
                     }
                 }
-                
-                //var date = postModel.PublishDate;
-                //var aaa = postModel.CategoryId;
-                //int user1 = postModel.UserId;
-                //postModel.User = Int32.Parse();
 
 
                 _context.Add(postModel);
@@ -100,8 +87,6 @@ namespace StudentWork.Controllers
                 return RedirectToAction(nameof(Index));
             }
             
-
-            //ViewBag.CategoryId = new SelectList(_context.categories, "CategoryId", "Name", postModel.CategoryId);
             ViewBag.CategoryId = new SelectList(_context.categories, "Id", "Name");
             return View(postModel);
         }
@@ -174,10 +159,13 @@ namespace StudentWork.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var post = await _context.posts.FindAsync(id);
+            ViewBag.CategoryId = new SelectList(_context.categories, "Id", "Name", post.CategoryId);
+            ViewBag.UserId = new SelectList(_context.users, "Id", "Name", post.UserId);
             return View(postModel);
         }
 
-        // GET: Category/Delete/5
+        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -197,7 +185,7 @@ namespace StudentWork.Controllers
             return View(post);
         }
 
-        // POST: Category/Delete/5
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

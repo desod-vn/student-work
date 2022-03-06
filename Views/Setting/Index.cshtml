@@ -159,10 +159,10 @@
                                 name="ids"
                                 value="@item.Id"
                                 class="form-check-input"
-                                id="@item.Id"
+                                id="@item.Id + 'w'"
                                 checked="@ViewBag.HotWorks.Contains(item.Id.ToString())"
                             >
-                            <label class="form-check-label" for="@item.Id">@item.Name</label>
+                            <label class="form-check-label" for="@item.Id + 'w'">@item.Name</label>
                         </div>
                     }
                     <div class="col-12 p-2">

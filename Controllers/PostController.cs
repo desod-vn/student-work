@@ -43,10 +43,17 @@ namespace StudentWork.Controllers
             {
                 return NotFound();
             }
-            var post = await _context.posts.Include(p => p.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            User user = _context.users.Find(post.UserId);
-            ViewBag.UserNameAuthorPost = user.Name;
+            var post = await _context.posts
+                .Include(p => p.Category)
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            ViewBag.RelatedPosts = _context.posts
+                .Include(p => p.Category)
+                .Include(p => p.User)
+                .OrderBy(r => Guid.NewGuid())
+                .Take(5);
+
             if (post == null)
             {
                 return NotFound();

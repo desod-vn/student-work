@@ -1,75 +1,78 @@
 ﻿@model StudentWork.Models.Post
-
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor;
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/Layout/_DashboardLayout.cshtml";
+    Layout = "~/Views/Shared/Layout/_Layout.cshtml";
 }
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <a href=""></a>
+            <img src="~/Uploads/@Model.Image" alt=" " class="img-fluid">
+        </div>
+        <div class="col-8">
+            <div class="small my-2">
+                <span class="mx-3">
+                    <i class="fas fa-user"></i>
+                    @Model.User.Name
+                </span>
+                <span class="mx-3">
+                    <i class="fas fa-clock"></i>
+                    @Model.PublishDate
+                </span>
+                <span class="mx-3">
+                    <i class="fas fa-folder"></i> 
+                    @Model.Category.Name
+                </span>
+            </div>
+            @if(HttpContextAccessor.HttpContext.Session.GetString("Name") == null) 
+            {
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Chỉnh sửa bài viết</a>
+                </div>
+            }
+            <div class="my-3 h1 font-weight-bold">
+                @Model.Name
+            </div>
+            <p>
+                @Html.Raw(Model.Content)
+            </p>
+        </div>
+    </div>
+</div>
 
-
-<div class="col-lg-11 single-left">
-    <div class="single-left1">
-        <img src="~/Uploads/@Model.Image" alt=" " class="img-fluid">
-        <h6 class="blog-first text-dark my-4">
-            <i class="far fa-user mr-2"></i>
-            @ViewBag.UserNameAuthorPost
-        </h6>
-        <h5>
-            <b><i>Category: @Html.DisplayFor(model => model.Category.Name)</i></b>
-        </h5>
-        <ul class="blog_list my-3" style="list-style-type: none;padding: 0">
-            <li style="display: inline-block;">
-                <a style="color: #777;">
-                    @Html.DisplayFor(model => model.PublishDate)
-                </a>
-            </li>
-            <li class="mx-3" style="display: inline-block;">
-                <a href="#" style="color: #777;">
-                    <i class="far fa-heart mr-1"></i>
-                    22
-                </a>
-            </li>
-            <li style="display: inline-block;">
-                <a href="#" style="color: #777;">
-                    <i class="far fa-comments mr-1"></i>
-                    16
-                </a>
-            </li>
+<div class="row">
+    <div class="col-lg-8">
+        <div class="bg-danger h2 p-3 font-weight-bold text-light">Bài viết cùng chuyên mục</div>
+        <ul class="list-group">
+            @foreach (var item in ViewBag.RelatedPosts)
+            {
+                <li class="list-group-item">
+                    <a 
+                        asp-controller="Post"
+                        asp-action="Details"    
+                        asp-route-id="@item.Id"
+                    >
+                        @item.Name
+                    </a>
+                    <hr />
+                    <div class="small my-2">
+                        <span class="mx-3">
+                            <i class="fas fa-user"></i>
+                            @Model.User.Name
+                        </span>
+                        <span class="mx-3">
+                            <i class="fas fa-clock"></i>
+                            @Model.PublishDate
+                        </span>
+                    </div>
+                </li>
+            }
         </ul>
-        <h5 class="card-title" style="text-align: center">
-            <span class="text-dark">@Html.DisplayFor(model => model.Name)</span>
-        </h5>
-        
-        <p>
-            
-            @Html.Raw(Model.Content)
-        </p>
     </div>
-    <br />
-    
-    
-    <div class="leave-coment-form">
-        <h3 class="blog-title  mb-4">Để lại một câu trả lời</h3>
-        <form action="#" method="post">
-            <div class="row">
-                <div class="col-sm-6 form-group">
-                    <input type="text" name="Name" class="form-control" placeholder="Họ và tên" required="">
-                </div>
-                <div class="col-sm-6 form-group">
-                    <input type="email" name="Email" class="form-control" placeholder="Email" required="">
-                </div>
-            </div>
-            <div class="form-group">
-                <textarea name="Message" class="form-control" placeholder="..." required=""></textarea>
-            </div>
-            <div class="mm_single_submit">
-                <input type="submit" value="Đăng">
-            </div>
-        </form>
+    <div class="col-4">
+        <partial name="_SocialPage" />
     </div>
 </div>
-<br />
-@*----------------------------------------*@
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Chỉnh sửa</a> |
-    <a asp-action="Index">Quay lại danh sách bài viết</a>
-</div>
+

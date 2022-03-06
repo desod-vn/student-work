@@ -43,10 +43,25 @@
         <div class="bg-primary h2 p-3 font-weight-bold text-light">Bài viết cập nhật</div>
         <div class="px-2">
             <div class="alert alert-info my-2">
-                <span class="badge badge-pill badge-primary p-2">Thông báo</span>
-                <span class="badge badge-pill badge-secondary p-2">Chế độ chính sách</span>
-                <span class="badge badge-pill badge-success p-2">Học bổng</span>
-                <span class="badge badge-pill badge-danger p-2">Hoạt động sinh viên</span>
+                @{
+                    int j = 0;
+                    
+                    for(int i = 0; i < ViewBag.HotCategories.Count; i++)
+                    {
+                        if(j == ViewBag.Bagdes.Length) {
+                            j = 0;
+                        }
+                        <a 
+                            asp-action="Details"
+                            asp-controller="Category"
+                            asp-route-id="@ViewBag.HotCategories[i].Id"
+                            class='text-light badge badge-pill @("badge-" + ViewBag.Bagdes[j]) px-3 p-2'
+                        >
+                            @ViewBag.HotCategories[i].Name
+                        </a>
+                        j++;
+                    }
+                }
             </div>
             @foreach(var item in Model.Select((value, i) => new { i, value }))
             {
@@ -75,12 +90,16 @@
                                     @item.value.Category.Name
                                 </span>
                             </div>
+
+                            <div class="ml-3 my-2 text-muted">
+                                @item.value.Content.Substring(3, 5)
+                            </div>
                         </p>
                     </div>
                 </div>
-                @if(item.i != Model.PageIndex - 1)
+                @if(item.i == Model.PageIndex - 1)
                 {
-                    <div class="border border-bottom"></div>
+                    <div class="border-bottom"></div>
                 }
             }
 
@@ -121,23 +140,50 @@
         <div class="row">
             <div class="col-lg-4">
                 <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Việc làm Fulltime
-                        <span class="badge badge-primary badge-pill">14</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Việc làm Parttime
-                        <span class="badge badge-primary badge-pill">2</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Thực tập sinh
-                        <span class="badge badge-primary badge-pill">1</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Sinh viên tìm việc
-                        <span class="badge badge-primary badge-pill">1</span>
-                    </li>
+                    @{
+                        int x = 0;
+                        
+                        for(int i = 0; i < ViewBag.HotWorks.Count; i++)
+                        {
+                            if(j == ViewBag.Bagdes.Length) {
+                                x = 0;
+                            }
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a 
+                                asp-action="Details"
+                                asp-controller="Category"
+                                asp-route-id="@ViewBag.HotWorks[i].Id"
+                            >
+                                @ViewBag.HotWorks[i].Name
+                            </a>
+                            <span class='badge @("badge-" + ViewBag.Bagdes[x]) badge-pill'>
+                                @ViewBag.HotWorks[i].Posts.Count
+                            </span>
+                        </li>
+                            x++;
+                        }
+                    }
                 </ul>
+            </div>
+            <div class="col-8">
+                @foreach (var item in ViewBag.HotWorkPosts)
+                {
+                    <div class="m-2 p-1">
+                        <i class="fas fa-hands-helping"></i>
+                         <a 
+                            asp-action="Details"
+                            asp-controller="Post"
+                            asp-route-id="@item.Id"
+                            class="h5 text-success text-decoration-none"
+                        >
+                            @item.Name
+                        </a>
+                        <br />
+                        Từ chuyên mục: @item.Category.Name
+                    </div>
+                    <div class="border-bottom"></div>
+                    
+                }
             </div>
         </div>
     </div>
@@ -148,56 +194,7 @@
                 <partial name="_FundList" model="ViewBag.Funds" />
             </div>
             <div class="col-lg-5">
-                <p>
-                    <a href="https://apps.agu.edu.vn/drl/login" style="text-align: center;">
-                        <img 
-                            alt=""
-                            src="https://sao.agu.edu.vn//sites/default/files/default_images/Untitled-1.jpg"
-                            style="height:105px;"
-                            class="img-fluid"
-                        />
-                    </a>
-                </p>
-                <p>
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfwSycOjMM3rUMkBzh_15nxZ0aJ_O-0qxTK0RaG1c6rHXEKzw/viewform">
-                        <img 
-                            alt=""
-                            src="https://sao.agu.edu.vn//sites/default/files/23146207_1344879738957126_1573850142_n.jpg"
-                            style="height:105px;"
-                            class="img-fluid"
-                        />
-                    </a>
-                </p>
-                <p>
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfW_RqaZuYFe1hNMohJjq2Cz3g8D4ZJgMaYRvAzgcuX2T-uGw/viewform">
-                        <img 
-                            alt=""
-                            src="https://sao.agu.edu.vn//sites/default/files/23163645_1345509845560782_1110001042_n.jpg"
-                            style="height:105px;"
-                            class="img-fluid"
-                        />
-                    </a>
-                </p>
-                <p>
-                    <a href="https://www.facebook.com/Sao_AGU-251373751976738/">
-                        <img 
-                            alt=""
-                            src="https://sao.agu.edu.vn//sites/default/files/23146307_1344892065622560_251256466_n.jpg"
-                            style="height:105px;"
-                            class="img-fluid"
-                        />
-                    </a>
-                </p>
-                <p>
-                    <a href="https://www.facebook.com/B%E1%BB%99-ph%E1%BA%ADn-H%E1%BB%97-tr%E1%BB%A3-Sinh-vi%C3%AAn-v%C3%A0-Quan-h%E1%BB%87-Doanh-nghi%E1%BB%87p-AGU-110693630296566/">
-                        <img 
-                            alt=""
-                            src="https://sao.agu.edu.vn//sites/default/files/default_images/FB%20BP.jpg"
-                            style="height:105px;"
-                            class="img-fluid"
-                        />
-                    </a>
-                </p>
+                <partial name="_SocialPage" />
             </div>
         </div>
     </div>

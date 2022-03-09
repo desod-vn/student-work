@@ -17,7 +17,7 @@
                             @(ViewBag.HotPosts.ContainsKey("ST_HotPosts_Title_" + i.ToString()) ? ViewBag.HotPosts["ST_HotPosts_Title_" + i.ToString()] : "")
                         </h5>
                         <p class="card-text text-muted small pl-3">
-                            @(ViewBag.HotPosts.ContainsKey("ST_HotPosts_Description_" + i.ToString()) ? ViewBag.HotPosts["ST_HotPosts_Description_" + i.ToString()].Substring(0, 150) + "..." : "")
+                            @(ViewBag.HotPosts.ContainsKey("ST_HotPosts_Description_" + i.ToString()) ? ViewBag.HotPosts["ST_HotPosts_Description_" + i.ToString()].Substring(0, 1) + "..." : "")
                         </p>
                         <a 
                             href='@(ViewBag.HotPosts.ContainsKey("ST_HotPosts_Link_" + i.ToString()) ? ViewBag.HotPosts["ST_HotPosts_Link_" + i.ToString()] : "")'

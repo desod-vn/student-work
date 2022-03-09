@@ -1,4 +1,5 @@
-@*@model StudentWork.Models.Category*@
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor;
 @model PaginatedList<StudentWork.Models.Post>
 @{
     ViewData["Title"] = "Chỉnh sửa chuyên mục";
@@ -9,16 +10,25 @@
         /*position: relative*/
         color: white;
     }
-    
+    .banner-view {
+        background-image: url(/Uploads/@ViewBag.Category.Image );
+        height: 600px;
+        position: relative;
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover; /* Resize the background image to cover the entire container */
+    }
     .banner-info {
         position: absolute;
         bottom: 65px;
         left: 25px;
     }
+
     h5 {
         font-size: 50px;
         line-height: 55px;
     }
+
     p {
         font-family: 'Mukta', sans-serif;
         font-size: 20px;
@@ -29,7 +39,7 @@
 </style>
 
 <div class="splash_img">
-    <div class="banner-view" style="background-image: url(/Uploads/@ViewBag.Category.Image);height: 600px; position: relative">
+    <div class="banner-view">
         <div class="banner-info">
             <h5>@ViewBag.Category.Name</h5>
             <p id="description">
@@ -115,20 +125,11 @@
     </div>
 </div>
 
+@if (HttpContextAccessor.HttpContext.Session.GetString("Name") != null)
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@ViewBag.Category.Id" class="btn btn-secondary">Chỉnh sửa</a> |
+        <a asp-action="Index">Quay lại danh sách chuyên mục</a>
+    </div>
+}
 
-<div>
-    <a asp-action="Edit" asp-route-id="@ViewBag.Category.Id" class="btn btn-secondary">Chỉnh sửa</a> |
-    <a asp-action="Index">Quay lại danh sách chuyên mục</a>
-</div>
-
-@*<script>
-        function abc() {
-            var text = document.getElementById("description");
-            var a = document.getElementById("test");
-            var text2 = text.nodeValue;
-
-            if (text2.length > 3) {
-                a.innerHTML = "aaaaaaaaa";
-            }
-        }
-    </script>*@

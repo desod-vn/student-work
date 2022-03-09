@@ -39,42 +39,12 @@ namespace StudentWork.Controllers
             int pageSize = 10;
             ViewBag.Category = await _context.categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            var list = await _context.posts.Where(x => x.CategoryId == id).ToListAsync();
-            ViewBag.ListPostOfCategory = list;
+            
             var posts = _context.posts
+                 .Where(p => p.CategoryId == id)
                  .Include(p => p.Category)
                  .Include(p => p.User);
-
-            var hotCategories = await _context.settings
-                .Where(s => s.Key == "ST_HotCategories")
-                .Select(s => int.Parse(s.Value))
-                .ToListAsync();
-
-            var hotWorks = await _context.settings
-                .Where(s => s.Key == "ST_HotWorks")
-                .Select(s => int.Parse(s.Value))
-                .ToListAsync();
-
-            string[] badges = { "primary", "secondary", "success", "danger", "info", "dark" };
-
-            ViewBag.HotCategories = await _context.categories
-                .Where(c => hotCategories.Contains(c.Id))
-                .ToListAsync();
-
-            ViewBag.HotWorks = await _context.categories
-                .Where(c => hotWorks.Contains(c.Id))
-                .Include(c => c.Posts)
-                .ToListAsync();
-
-            ViewBag.HotWorkPosts = _context.posts
-               .Where(p => hotWorks.Contains(p.CategoryId))
-               .Include(p => p.Category)
-               .Take(5);
-
-            ViewBag.Bagdes = badges;
-
             
-
             return View(await PaginatedList<Post>.CreateAsync(posts.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 

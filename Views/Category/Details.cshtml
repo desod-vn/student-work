@@ -1,93 +1,135 @@
-@model StudentWork.Models.Category
-
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor;
+@model PaginatedList<StudentWork.Models.Post>
 @{
     ViewData["Title"] = "Chỉnh sửa chuyên mục";
-    Layout = "~/Views/Shared/Layout/_DashboardLayout.cshtml";
+    Layout = "~/Views/Shared/Layout/_Layout.cshtml";
 }
+<style>
+    .splash_img {
+        /*position: relative*/
+        color: white;
+    }
+    .banner-view {
+        background-image: url(/Uploads/@ViewBag.Category.Image );
+        height: 600px;
+        position: relative;
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover; /* Resize the background image to cover the entire container */
+    }
+    .banner-info {
+        position: absolute;
+        bottom: 65px;
+        left: 25px;
+    }
 
-<h1>
-    @*@ViewData["Title"]</h1>*@
+    h5 {
+        font-size: 50px;
+        line-height: 55px;
+    }
 
-    <div>
-        <h4>
-            @Html.DisplayNameFor(model => model.Name) - @Html.DisplayFor(model => model.Name)
-        </h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Image)
-            </dt>
-            <dd class="col-sm-8">
-                <img src="~/Uploads/@Model.Image" style="width: 200px" /><br />
-                @Html.DisplayFor(model => model.Image)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Description)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Description)
-            </dd>
-        </dl>
-    </div>
-    
-   
-    <div class="container">
-        <div class="border mt-5">
-            <div class="bg-primary h2 p-3 font-weight-bold text-light">Bài viết thuộc thể loại @Model.Name</div>
-            <div class="px-2">
-                <div class="alert alert-info my-2">
-                    <span class="badge badge-pill badge-primary p-2">Thông báo</span>
-                    <span class="badge badge-pill badge-secondary p-2">Chế độ chính sách</span>
-                    <span class="badge badge-pill badge-success p-2">Học bổng</span>
-                    <span class="badge badge-pill badge-danger p-2">Hoạt động sinh viên</span>
-                </div>
-                @foreach (var item in ViewBag.ListPostOfCategory)
-                {
-                    <div class="row my-2">
-                        <div class="col-lg-4 col-12">
-                            <a href="/Post/Details/@item.Id" style="text-decoration: none"><img class="img-fluid" src="~/assets/img/a1.jpg" /></a>
-                        </div>
-                        <div class="col-lg-8 col-12">
-                            <h2><a href="/Post/Details/@item.Id" style="text-decoration: none">@item.Name</a></h2>
-                            <p>
-                                @Html.Raw(item.Content)
-                            </p>
-                        </div>
-                    </div>
-                    <hr />
-                    @*@if (i != 9)
-                    {
-                        <div class="border border-bottom"></div>
-                    }*@
-                }
-                
-            </div>
-            <ul class="pagination bg-light p-2 justify-content-end mb-0">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </li>
-            </ul>
+    p {
+        font-family: 'Mukta', sans-serif;
+        font-size: 20px;
+        color: #f8f9fa;
+        opacity: .8;
+        letter-spacing: .5px;
+    }
+</style>
+
+<div class="splash_img">
+    <div class="banner-view">
+        <div class="banner-info">
+            <h5>@ViewBag.Category.Name</h5>
+            <p id="description">
+                @ViewBag.Category.Description
+            </p>
+
+            @*<a class="btn btn-style btn-primary mt-sm-5 mt-4" href="#url">
+                    Read More
+                </a>*@
         </div>
     </div>
+</div>
+<div class="container">
+    <div class="border mt-5" id="post">
+        <div class="bg-primary h2 p-3 font-weight-bold text-light">Bài viết thuộc thể loại @ViewBag.Category.Name</div>
+        <div class="px-2">
+            @foreach (var item in Model.Select((value, i) => new { i, value }))
+            {
+                <div class="row my-2">
+                    <div class="col-lg-4 col-12">
+                        <a href='@Url.Action("Details", "Post", new { id = item.value.Id })'>
+                            <img class="img-fluid" style="height: 200px;" src='@(item.value.Image != null ? "/Uploads/" +item.value.Image : "~/assets/img/a1.jpg")' />
+                        </a>
+                    </div>
+                    <div class="col-lg-8 col-12">
+                        <a class="h2" href='@Url.Action("Details", "Post", new { id = item.value.Id })'>
+                            @item.value.Name
+                        </a>
+                        <p>
+                            <div class="small">
+                                <span class="mx-3">
+                                    <i class="fas fa-user"></i>
+                                    @item.value.User.Name
+                                </span>
+                                <span class="mx-3">
+                                    <i class="fas fa-clock"></i>
+                                    @item.value.PublishDate
+                                </span>
+                                <span class="mx-3">
+                                    <i class="fas fa-folder"></i>
+                                    @item.value.Category.Name
+                                </span>
+                            </div>
+
+                            <div class="ml-3 my-2 text-muted">
+                                @item.value.Content.Substring(3, 5)
+                            </div>
+                        </p>
+                    </div>
+                </div>
+                @if (item.i == Model.PageIndex - 1)
+                {
+                    <div class="border-bottom"></div>
+                }
+            }
+
+            @{
+                var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+            }
+
+        </div>
+        <ul class="pagination bg-light p-2 justify-content-end mb-0">
+            <li class="page-item">
+                <a asp-action="Index"
+                   asp-fragment="post"
+                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                   class="page-link btn @prevDisabled">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a asp-action="Index"
+                   asp-fragment="post"
+                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                   class="page-link btn @nextDisabled">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+@if (HttpContextAccessor.HttpContext.Session.GetString("Name") != null)
+{
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-secondary">Chỉnh sửa</a> |
+        <a asp-action="Edit" asp-route-id="@ViewBag.Category.Id" class="btn btn-secondary">Chỉnh sửa</a> |
         <a asp-action="Index">Quay lại danh sách chuyên mục</a>
     </div>
+}
+

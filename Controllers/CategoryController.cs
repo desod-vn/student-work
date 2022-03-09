@@ -30,24 +30,22 @@ namespace StudentWork.Controllers
         }
 
         // GET: Category/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? pageNumber)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var category = await _context.categories
+            int pageSize = 10;
+            ViewBag.Category = await _context.categories
                 .FirstOrDefaultAsync(m => m.Id == id);
-            var list = await _context.posts.Where(x => x.CategoryId == id).ToListAsync();
-            ViewBag.ListPostOfCategory = list;
-
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
+            
+            var posts = _context.posts
+                 .Where(p => p.CategoryId == id)
+                 .Include(p => p.Category)
+                 .Include(p => p.User);
+            
+            return View(await PaginatedList<Post>.CreateAsync(posts.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Category/Create
